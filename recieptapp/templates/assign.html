@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Assign People to Items</title>
+  <style>
+    .item-group { margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <h1>Assign People to Items</h1>
+  
+  <form action="/result" method="post">
+    <h2>Scanned Items</h2>
+    {% for item in items %}
+      <div class="item-group">
+        <label>{{ item.item }} (${{ "%.2f"|format(item.price) }})</label><br>
+        <input type="hidden" name="item_{{ loop.index0 }}" value="{{ item.item }}">
+        <input type="hidden" name="price_{{ loop.index0 }}" value="{{ item.price }}">
+        <input type="text" name="names_{{ loop.index0 }}" placeholder="Enter names or 'ignore'" required>
+      </div>
+    {% endfor %}
+
+    <h2>Manually Add Items</h2>
+    <div id="manual-items">
+      <!-- Manual items will be appended here -->
+    </div>
+    
+    <button type="button" onclick="addManualItem()">+ Add Manual Item</button>
+    <br><br>
+
+    <label>Receipt Total:</label>
+    <input type="number" name="total" step="0.01" required><br><br>
+
+    <label>Who Paid?</label>
+    <input type="text" name="payer" required><br><br>
+
+    <button type="submit">Calculate Totals</button>
+  </form>
+
+  <script>
+    let manualIndex = 0;
+
+    function addManualItem() {
+      const container = document.getElementById("manual-items");
+      const div = document.createElement("div");
+      div.classList.add("item-group");
+
+      div.innerHTML = `
+        <label>Item Name:</label><br>
+        <input type="text" name="manual_item_${manualIndex}" required><br>
+        <label>Price:</label><br>
+        <input type="number" name="manual_price_${manualIndex}" step="0.01" required><br>
+        <label>Who shared it?</label><br>
+        <input type="text" name="manual_names_${manualIndex}" placeholder="Enter names or 'ignore'" required><br>
+      `;
+
+      container.appendChild(div);
+      manualIndex++;
+    }
+  </script>
+</body>
+</html>

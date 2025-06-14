@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <title>Results</title>
+</head>
+<body>
+  <h1>Receipt Split Results</h1>
+  <ul>
+    {% for name, amount in totals.items() %}
+      <li>{{ name }} owes ${{ "%.2f"|format(amount) }}</li>
+    {% endfor %}
+  </ul>
+  <p><strong>Total Split:</strong> ${{ "%.2f"|format(total) }}</p>
+</body>
+</html>
